@@ -45,9 +45,9 @@ function Get-CurrentADStaffObjs ($months, $ou, [pscredential]$cred) {
  $result
 }
 
-function Get-ExcludedSams {
+function Get-ExcludedSams ( [pscredential]$cred) {
  process {
-  $sams = (Get-ADGroupMember -Identity $_).SamAccountName
+  $sams = (Get-ADGroupMember -Identity $_ -Credential $cred).SamAccountName
   Write-Host ('{0},[{1}],count: {2}' -f $MyInvocation.MyCommand.Name, $_, $sams.count) -F Green
   $sams
  }
@@ -104,7 +104,7 @@ Import-Module -Name ActiveDirectory -Cmdlet $adCmdLets -WarningAction SilentlyCo
 if ($WhatIf) { Show-TestRun }
 Show-BlockInfo main
 
-$excludedSams = $ExcludeGroups | Get-ExcludedSams
+$excludedSams = $ExcludeGroups | Get-ExcludedSams -cred $ADCredential
 $currentADStaff = Get-CurrentADStaffObjs -months $MonthsSinceLastLogon -ou $SearchBase -cred $ADCredential
 
 $validSams = $currentADStaff |
