@@ -91,7 +91,7 @@ function Update-GroupMembers ($group, $validSams, [pscredential]$cred) {
   }
   Write-Host ('{0},{1}' -f $MyInvocation.MyCommand.Name, $group)
   Add-ADGroupMember @addMembers
-  $result = Get-ADGroupMember -Identity $group
+  $result = Get-ADGroupMember -Identity $group -Credential $cred
   Write-Host ('{0},[{1}],count: {2}' -f $MyInvocation.MyCommand.Name, $group, @($result).count) -Fore Green
  }
 }
